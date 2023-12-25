@@ -10,7 +10,7 @@ import (
 var ranOnce bool
 
 const (
-	UnknownCode = 0
+	UnknownCode     = 0
 	UnreachableCode = 1
 	AuthFailureCode = 2
 )
@@ -19,7 +19,7 @@ const (
 // and a message.
 type ErrNetwork struct {
 	Code int
-	Msg string
+	Msg  string
 }
 
 func (e ErrNetwork) Error() string {
@@ -32,9 +32,9 @@ func (e ErrNetwork) Error() string {
 func someFunc(data string) error {
 	if !ranOnce {
 		ranOnce = true
-		return ErrNetwork {
+		return ErrNetwork{
 			Code: AuthFailureCode,
-			Msg: "user unrecognized"
+			Msg:  "user unrecognized",
 		}
 	}
 	return fmt.Errorf("another error")
@@ -48,4 +48,15 @@ func main() {
 			var netErr ErrNetwork
 			if errors.As(err, &netErr) {
 				if netErr.Code == AuthFailureCode {
-					
+					log.Println("auth failure! Danger Will Robinson!")
+					return
+				}
+				log.Println("network error: ", err)
+				time.Sleep(1 * time.Second)
+				continue
+			}
+			log.Println("unrecoverable: ", err)
+		}
+		break
+	}
+}
