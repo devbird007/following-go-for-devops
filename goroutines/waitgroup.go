@@ -15,6 +15,7 @@ func main() {
 			fmt.Println(n)
 		}(i)
 	}
+
 	wg.Wait()
 	fmt.Println("All work done")
 }
